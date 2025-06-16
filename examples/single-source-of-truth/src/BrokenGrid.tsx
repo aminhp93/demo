@@ -1,40 +1,40 @@
-import { DataGrid } from "@mui/x-data-grid";
-import { Box } from "@mui/material";
+import * as React from "react";
+import { DataGrid, type DataGridProps } from "@mui/x-data-grid";
+import Box from "@mui/material/Box";
+import { COLUMNS, ROW_SELECTION_MODEL, FILTER_MODEL } from "./utils";
 
-const rawData = [
-  { id: 1, name: "Alice", age: 25 },
-  { id: 2, name: "Bob", age: 30 },
-  { id: 3, name: "Charlie", age: 28 },
-  { id: 4, name: "Diana", age: 22 },
-];
-
-function BrokenGrid() {
+function BrokenGrid(props: any) {
   // ❌ Separated states
-  const selectedIds = new Set([2]); // Stored separately
-  const filteredData = rawData.filter((row) => row.age > 24); // Filtered manually
-  const highlightedId = 4;
+  //   const [rows, setRows] = React.useState(props.rows);
+  const [rowSelectionModel, setRowSelectionModel] =
+    React.useState(ROW_SELECTION_MODEL);
+  //   const [filterModel, setFilterModel] = React.useState(FILTER_MODEL);
+
+  const onFilterModelChange = React.useCallback<
+    NonNullable<DataGridProps["onFilterModelChange"]>
+  >((newFilterModel) => {
+    console.log("onFilterModelChange", newFilterModel);
+    // Update the filter model in the single source of truth
+    // setFilterModel(newFilterModel);
+  }, []);
+
+  console.log("rowSelectionModel", rowSelectionModel);
 
   return (
     <Box sx={{ height: 400 }}>
       <h3>🚫 No SSOT (Bug-Prone)</h3>
       <DataGrid
-        rows={filteredData} // not synced with selection
-        columns={[
-          { field: "id", headerName: "ID", width: 70 },
-          { field: "name", headerName: "Name", width: 130 },
-          { field: "age", headerName: "Age", width: 100 },
-        ]}
+        rows={props.rows} // not synced with selection
+        columns={COLUMNS}
         checkboxSelection
-        rowSelectionModel={{ type: "include", ids: selectedIds }} // could point to a filtered-out row
-        getRowClassName={(params) =>
-          params.id === highlightedId ? "highlight-row" : ""
-        }
+        rowSelectionModel={rowSelectionModel} // not synced with rows
+        onRowSelectionModelChange={(newSelection) => {
+          console.log("onRowSelectionModelChange", newSelection);
+          setRowSelectionModel(newSelection);
+        }}
+        // filterModel={filterModel} // not synced with rows
+        onFilterModelChange={onFilterModelChange}
       />
-      <style>{`
-        .highlight-row {
-          background-color: #ffe0b2 !important;
-        }
-      `}</style>
     </Box>
   );
 }
