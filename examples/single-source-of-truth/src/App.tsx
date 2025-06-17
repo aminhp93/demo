@@ -1,17 +1,34 @@
-import BrokenGrid from "./BrokenGrid";
-import CleanGrid from "./CleanGrid";
-import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
-import { ROWS } from "./utils";
-import { useState } from "react";
-import BrokenList from "./BrokenList";
-import CleanList from "./CleanList";
+import BrokenGrid from './BrokenGrid';
+import CleanGrid from './CleanGrid';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import { ROWS } from './utils';
+import { useState } from 'react';
+import BrokenList from './BrokenList';
+import CleanList from './CleanList';
 
 function App() {
   const [rows, setRows] = useState(ROWS);
   return (
     <div>
       <h1>Single Source of Truth</h1>
+
+      <Grid container spacing={2}>
+        <Grid size={6}>
+          <BrokenList />
+        </Grid>
+        <Grid size={6}>
+          <CleanList />
+        </Grid>
+      </Grid>
+
+      <hr
+        style={{
+          marginBlockStart: '4em',
+          marginBlockEnd: '4em',
+        }}
+      />
+
       <Button
         onClick={() => {
           setRows(ROWS.filter((i) => i.id !== 1));
@@ -27,12 +44,6 @@ function App() {
         reset
       </Button>
       <Grid container spacing={2}>
-        <Grid size={6}>
-          <BrokenList />
-        </Grid>
-        <Grid size={6}>
-          <CleanList />
-        </Grid>
         <Grid size={6}>
           <BrokenGrid rows={rows} />
         </Grid>

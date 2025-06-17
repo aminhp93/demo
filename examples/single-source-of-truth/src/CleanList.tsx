@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
 
 type Item = {
   id: number;
@@ -7,11 +7,11 @@ type Item = {
 };
 
 const initialItems: Item[] = [
-  { id: 1, name: "Alice", role: "Dev" },
-  { id: 2, name: "Bob", role: "Design" },
-  { id: 3, name: "Charlie", role: "Dev" },
-  { id: 4, name: "Diana", role: "QA" },
-  { id: 5, name: "Eve", role: "Manager" },
+  { id: 1, name: 'Alice', role: 'Dev' },
+  { id: 2, name: 'Bob', role: 'Design' },
+  { id: 3, name: 'Charlie', role: 'Dev' },
+  { id: 4, name: 'Diana', role: 'QA' },
+  { id: 5, name: 'Eve', role: 'Manager' },
 ];
 
 export default function CleanList() {
@@ -29,7 +29,7 @@ export default function CleanList() {
       setData((prev) => {
         if (prev.length <= 3) return prev;
         const toDelete = prev[Math.floor(Math.random() * prev.length)];
-        console.log("🔁 Deleting item:", toDelete);
+        console.log('🔁 Deleting item:', toDelete);
         return prev.filter((item) => item.id !== toDelete.id);
       });
     }, 5000);
@@ -73,7 +73,7 @@ export default function CleanList() {
           Show All
         </button>
         <button
-          onClick={() => setUIState((s) => ({ ...s, filterRole: "Dev" }))}
+          onClick={() => setUIState((s) => ({ ...s, filterRole: 'Dev' }))}
         >
           Filter: Dev
         </button>
@@ -88,15 +88,15 @@ export default function CleanList() {
             key={item.id}
             onClick={() => toggleSelect(item.id)}
             style={{
-              cursor: "pointer",
+              cursor: 'pointer',
               padding: 8,
               margin: 4,
-              border: "1px solid #ccc",
+              border: '1px solid #ccc',
               backgroundColor: syncedSelectedIds.includes(item.id)
-                ? "#bbdefb"
+                ? '#bbdefb'
                 : syncedHighlightId === item.id
-                ? "#fff59d"
-                : "#fff",
+                  ? '#fff59d'
+                  : '#fff',
             }}
           >
             {item.name} - {item.role}
@@ -105,7 +105,7 @@ export default function CleanList() {
       </ul>
 
       <div style={{ marginTop: 20 }}>
-        <strong>Synced Selected IDs:</strong>{" "}
+        <strong>Synced Selected IDs:</strong>{' '}
         {JSON.stringify(syncedSelectedIds)}
         <br />
         <strong>Synced Highlight ID:</strong> {syncedHighlightId}

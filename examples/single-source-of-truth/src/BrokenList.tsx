@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 type Item = {
   id: number;
@@ -7,11 +7,11 @@ type Item = {
 };
 
 const initialItems: Item[] = [
-  { id: 1, name: "Alice", role: "Dev" },
-  { id: 2, name: "Bob", role: "Design" },
-  { id: 3, name: "Charlie", role: "Dev" },
-  { id: 4, name: "Diana", role: "QA" },
-  { id: 5, name: "Eve", role: "Manager" },
+  { id: 1, name: 'Alice', role: 'Dev' },
+  { id: 2, name: 'Bob', role: 'Design' },
+  { id: 3, name: 'Charlie', role: 'Dev' },
+  { id: 4, name: 'Diana', role: 'QA' },
+  { id: 5, name: 'Eve', role: 'Manager' },
 ];
 
 export default function BrokenList() {
@@ -35,7 +35,7 @@ export default function BrokenList() {
       setData((prev) => {
         if (prev.length <= 3) return prev;
         const toDelete = prev[Math.floor(Math.random() * prev.length)];
-        console.log("❌ Deleting item:", toDelete);
+        console.log('❌ Deleting item:', toDelete);
 
         const newData = prev.filter((item) => item.id !== toDelete.id);
         // ❌ Forget to update selectedIds / highlightId → causes UI bugs
@@ -58,7 +58,7 @@ export default function BrokenList() {
 
       <div style={{ marginBottom: 10 }}>
         <button onClick={() => setFilterRole(null)}>Show All</button>
-        <button onClick={() => setFilterRole("Dev")}>Filter: Dev</button>
+        <button onClick={() => setFilterRole('Dev')}>Filter: Dev</button>
         <button onClick={() => setHighlightId(5)}>Highlight Eve</button>
       </div>
 
@@ -68,15 +68,15 @@ export default function BrokenList() {
             key={item.id}
             onClick={() => toggleSelect(item.id)}
             style={{
-              cursor: "pointer",
+              cursor: 'pointer',
               padding: 8,
               margin: 4,
-              border: "1px solid #ccc",
+              border: '1px solid #ccc',
               backgroundColor: selectedIds.includes(item.id)
-                ? "#bbdefb"
+                ? '#bbdefb'
                 : highlightId === item.id
-                ? "#fff59d"
-                : "#fff",
+                  ? '#fff59d'
+                  : '#fff',
             }}
           >
             {item.name} - {item.role}
@@ -85,7 +85,7 @@ export default function BrokenList() {
       </ul>
 
       <div style={{ marginTop: 20 }}>
-        <strong>Selected IDs (NOT synced):</strong>{" "}
+        <strong>Selected IDs (NOT synced):</strong>{' '}
         {JSON.stringify(selectedIds)}
         <br />
         <strong>Highlight ID (NOT synced):</strong> {highlightId}

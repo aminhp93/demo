@@ -1,12 +1,12 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   DataGrid,
   type DataGridProps,
   type GridFilterModel,
   type GridRowSelectionModel,
-} from "@mui/x-data-grid";
-import Box from "@mui/material/Box";
-import { COLUMNS, ROWS, ROW_SELECTION_MODEL, FILTER_MODEL } from "./utils";
+} from '@mui/x-data-grid';
+import Box from '@mui/material/Box';
+import { COLUMNS, ROWS, ROW_SELECTION_MODEL, FILTER_MODEL } from './utils';
 
 interface TableState {
   rows: {

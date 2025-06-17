@@ -1,42 +1,36 @@
-import * as React from "react";
-import { DataGrid, type DataGridProps } from "@mui/x-data-grid";
-import Box from "@mui/material/Box";
-import { COLUMNS, ROW_SELECTION_MODEL, FILTER_MODEL } from "./utils";
+import {
+  DataGridPro,
+  useGridApiRef,
+  gridFilteredSortedRowIdsSelector,
+  gridVisibleColumnFieldsSelector,
+} from '@mui/x-data-grid-pro';
 
-function BrokenGrid(props: any) {
-  // ❌ Separated states
-  //   const [rows, setRows] = React.useState(props.rows);
-  const [rowSelectionModel, setRowSelectionModel] =
-    React.useState(ROW_SELECTION_MODEL);
-  //   const [filterModel, setFilterModel] = React.useState(FILTER_MODEL);
+const rows = [
+  { id: 1, col1: 'Hello', col2: 'World' },
+  { id: 2, col1: 'DataGrid', col2: 'Rocks' },
+  { id: 3, col1: 'MUI', col2: 'is Great' },
+];
 
-  const onFilterModelChange = React.useCallback<
-    NonNullable<DataGridProps["onFilterModelChange"]>
-  >((newFilterModel) => {
-    console.log("onFilterModelChange", newFilterModel);
-    // Update the filter model in the single source of truth
-    // setFilterModel(newFilterModel);
-  }, []);
+const columns = [
+  { field: 'id', headerName: 'ID', width: 90 },
+  { field: 'col1', headerName: 'Column 1', width: 150 },
+  { field: 'col2', headerName: 'Column 2', width: 150 },
+];
 
-  console.log("rowSelectionModel", rowSelectionModel);
+export default function FilteredRowsExample() {
+  const apiRef = useGridApiRef();
+
+  const getFilteredRows = () => {
+    const filteredRowIds = gridFilteredSortedRowIdsSelector(apiRef);
+    const visibleColumnFields = gridVisibleColumnFieldsSelector(apiRef);
+
+    console.log('Filtered Row IDs:', filteredRowIds, visibleColumnFields);
+  };
 
   return (
-    <Box sx={{ height: 400 }}>
-      <h3>🚫 No SSOT (Bug-Prone)</h3>
-      <DataGrid
-        rows={props.rows} // not synced with selection
-        columns={COLUMNS}
-        checkboxSelection
-        rowSelectionModel={rowSelectionModel} // not synced with rows
-        onRowSelectionModelChange={(newSelection) => {
-          console.log("onRowSelectionModelChange", newSelection);
-          setRowSelectionModel(newSelection);
-        }}
-        // filterModel={filterModel} // not synced with rows
-        onFilterModelChange={onFilterModelChange}
-      />
-    </Box>
+    <div style={{ height: 400, width: '100%' }}>
+      <button onClick={getFilteredRows}>Log Filtered Rows</button>
+      <DataGridPro apiRef={apiRef} rows={rows} columns={columns} />
+    </div>
   );
 }
-
-export default BrokenGrid;
