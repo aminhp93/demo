@@ -13,6 +13,21 @@ function App() {
     <div>
       <h1>Single Source of Truth</h1>
 
+      <Button
+        onClick={() => {
+          setRows(ROWS.filter((i) => i.id !== 1));
+        }}
+      >
+        delete row 1
+      </Button>
+      <Button
+        onClick={() => {
+          setRows(ROWS);
+        }}
+      >
+        reset
+      </Button>
+      
       <Grid container spacing={2}>
         <Grid size={6}>
           <BrokenList />

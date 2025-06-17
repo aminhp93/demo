@@ -23,19 +23,19 @@ export default function CleanList() {
     filterRole: null as string | null,
   });
 
-  // ⏱ Simulate realtime updates (delete an item every 5s)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setData((prev) => {
-        if (prev.length <= 3) return prev;
-        const toDelete = prev[Math.floor(Math.random() * prev.length)];
-        console.log('🔁 Deleting item:', toDelete);
-        return prev.filter((item) => item.id !== toDelete.id);
-      });
-    }, 5000);
+  // // ⏱ Simulate realtime updates (delete an item every 5s)
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setData((prev) => {
+  //       if (prev.length <= 3) return prev;
+  //       const toDelete = prev[Math.floor(Math.random() * prev.length)];
+  //       console.log('🔁 Deleting item:', toDelete);
+  //       return prev.filter((item) => item.id !== toDelete.id);
+  //     });
+  //   }, 5000);
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   // ✅ Derived values (SSOT principle)
   const visibleItems = useMemo(() => {

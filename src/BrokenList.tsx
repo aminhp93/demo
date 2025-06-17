@@ -29,22 +29,22 @@ export default function BrokenList() {
     setFilteredItems(filtered);
   }, [data, filterRole]);
 
-  // ❌ Realtime update, deletes a random item every 5s
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setData((prev) => {
-        if (prev.length <= 3) return prev;
-        const toDelete = prev[Math.floor(Math.random() * prev.length)];
-        console.log('❌ Deleting item:', toDelete);
+  // // ❌ Realtime update, deletes a random item every 5s
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setData((prev) => {
+  //       if (prev.length <= 3) return prev;
+  //       const toDelete = prev[Math.floor(Math.random() * prev.length)];
+  //       console.log('❌ Deleting item:', toDelete);
 
-        const newData = prev.filter((item) => item.id !== toDelete.id);
-        // ❌ Forget to update selectedIds / highlightId → causes UI bugs
-        return newData;
-      });
-    }, 5000);
+  //       const newData = prev.filter((item) => item.id !== toDelete.id);
+  //       // ❌ Forget to update selectedIds / highlightId → causes UI bugs
+  //       return newData;
+  //     });
+  //   }, 5000);
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const toggleSelect = (id: number) => {
     setSelectedIds((prev) =>
