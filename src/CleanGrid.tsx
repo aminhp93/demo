@@ -1,60 +1,94 @@
-import * as React from 'react';
+import { useMemo, useEffect, useState, useCallback } from 'react';
 import {
   DataGrid,
-  type DataGridProps,
-  type GridFilterModel,
   type GridRowSelectionModel,
+  type DataGridProps,
+  type GridRowId,
+  GridLogicOperator,
+  gridFilteredSortedRowIdsSelector,
+  useGridApiRef,
 } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import { COLUMNS, ROWS, ROW_SELECTION_MODEL, FILTER_MODEL } from './utils';
+import { COLUMNS, type Item } from './utils';
 
-interface TableState {
-  rows: {
-    id: number;
-    name: string;
-    age: number;
-  }[];
-  rowSelectionModel: GridRowSelectionModel;
-  filterModel: GridFilterModel;
+interface Props {
+  listData: Item[];
 }
 
-function CleanGrid(props: any) {
-  const [tableState, setTableState] = React.useState<TableState>({
-    // rows: props.rows,
-    rowSelectionModel: ROW_SELECTION_MODEL,
-    filterModel: FILTER_MODEL,
+function CleanGrid(props: Props) {
+  // Hooks
+  const apiRef = useGridApiRef();
+
+  // data state
+  const [rows, setRows] = useState(props.listData);
+
+  // ui state
+  const [rowSelectionModel, setRowSelectionModel] =
+    useState<GridRowSelectionModel>({ type: 'include', ids: new Set() });
+  const [filterModel, setFilterModel] = useState<DataGridProps['filterModel']>({
+    items: [],
+    logicOperator: GridLogicOperator.And,
+  });
+  const [filterIds, setFilterIds] = useState<Set<GridRowId>>(new Set());
+
+  useEffect(() => {
+    setRows(props.listData);
+  }, [props.listData]);
+
+  const onFilterModelChange = useCallback<
+    NonNullable<DataGridProps['onFilterModelChange']>
+  >((newFilterModel) => {
+    setFilterModel(newFilterModel);
+  }, []);
+
+  const selectedItems = rows.filter((i) => {
+    return rowSelectionModel.ids.has(i.id);
   });
 
-  //   const onFilterModelChange = React.useCallback<
-  //     NonNullable<DataGridProps["onFilterModelChange"]>
-  //   >(
-  //     (newFilterModel) => {
-  //       // Update the filter model in the single source of truth
-  //       setTableState((prev) => ({
-  //         ...prev,
-  //         filterModel: newFilterModel,
-  //       }));
-  //     },
-  //     [setTableState]
-  //   );
+  const highlightItem = useMemo(() => {
+    return rows.find((i) => i.id === 1);
+  }, [rows]);
+
+  useEffect(() => {
+    const xxx = gridFilteredSortedRowIdsSelector(apiRef);
+    console.log('Filtered Row IDs:', xxx);
+    setFilterIds(new Set(xxx));
+  }, [apiRef, filterModel]);
+
+  const filteredItems = useMemo(() => {
+    return rows.filter((i) => filterIds.has(i.id));
+  }, [rows, filterIds]);
 
   return (
     <Box sx={{ height: 400 }}>
-      <h3>✅ With SSOT (Clean and Consistent)</h3>
       <DataGrid
-        rows={props.rows}
+        apiRef={apiRef}
+        rows={rows}
         columns={COLUMNS}
+        rowHeight={40}
         checkboxSelection
-        rowSelectionModel={tableState.rowSelectionModel}
+        rowSelectionModel={rowSelectionModel}
         onRowSelectionModelChange={(newSelection) =>
-          setTableState((prev) => ({
-            ...prev,
-            rowSelectionModel: newSelection,
-          }))
+          setRowSelectionModel(newSelection)
         }
-        // filterModel={tableState.filterModel}
-        // onFilterModelChange={onFilterModelChange}
+        filterModel={filterModel}
+        onFilterModelChange={onFilterModelChange}
       />
+      <div style={{ marginTop: 20 }}>
+        <p>
+          🧠 <strong>Selected Items:</strong>{' '}
+          {selectedItems.length
+            ? selectedItems.map((i) => i.name).join(', ')
+            : 'None'}
+        </p>
+        <p>
+          🌟 <strong>Highlight Item:</strong> {highlightItem?.name ?? 'None'}
+        </p>
+        <p>
+          🔎 <strong>Filtered Items:</strong>{' '}
+          {filteredItems.map((i) => i.name).join(', ') || 'Empty'}
+        </p>
+      </div>
     </Box>
   );
 }

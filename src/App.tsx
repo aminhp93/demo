@@ -5,11 +5,10 @@ import { useState } from 'react';
 // import List from './ManualSyncHellFull';
 // import List from './SSOTListSingleState';
 import List from './SSOTListGroupedState';
-
+import Table from './CleanGrid';
 
 function App() {
   const [listData, setListData] = useState(DATA);
-
 
   return (
     <Box>
@@ -57,11 +56,9 @@ function App() {
       >
         reset
       </Button>
-      
-    
-      <List listData={listData} />
-       
 
+      <List listData={listData} />
+      <Table listData={listData} />
     </Box>
   );
 }

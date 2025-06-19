@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
-import { type Item, INITIAL_UI_STATE } from './utils';
+import { type Item } from './utils';
 
 interface Props {
   listData: Item[];
@@ -11,13 +11,16 @@ type UIState = {
   filterRole: string | null;
 };
 
-
 export default function SSOTListGroupedState(props: Props) {
   // 🔵 Data State
   const [data, setData] = useState<Item[]>(props.listData);
 
   // 🟠 Grouped UI State
-  const [uiState, setUIState] = useState<UIState>(INITIAL_UI_STATE);
+  const [uiState, setUIState] = useState<UIState>({
+    selectedIds: [],
+    highlightId: null,
+    filterRole: null,
+  });
 
   useEffect(() => {
     setData(props.listData);
@@ -26,39 +29,38 @@ export default function SSOTListGroupedState(props: Props) {
   // 🟣 Derived Views
   const filteredItems = useMemo(() => {
     return uiState.filterRole
-      ? data.filter(d => d.role === uiState.filterRole)
+      ? data.filter((d) => d.role === uiState.filterRole)
       : data;
   }, [data, uiState.filterRole]);
 
   const selectedItems = useMemo(() => {
-    return data.filter(d => uiState.selectedIds.includes(d.id));
+    return data.filter((d) => uiState.selectedIds.includes(d.id));
   }, [data, uiState.selectedIds]);
 
   const highlightItem = useMemo(() => {
-    return data.find(d => d.id === uiState.highlightId) ?? null;
+    return data.find((d) => d.id === uiState.highlightId) ?? null;
   }, [data, uiState.highlightId]);
 
   // 🧩 Handlers
   const toggleSelect = (id: number) => {
-    setUIState(prev => ({
+    setUIState((prev) => ({
       ...prev,
       selectedIds: prev.selectedIds.includes(id)
-        ? prev.selectedIds.filter(i => i !== id)
+        ? prev.selectedIds.filter((i) => i !== id)
         : [...prev.selectedIds, id],
     }));
   };
 
   const setFilter = (role: string | null) => {
-    setUIState(prev => ({ ...prev, filterRole: role }));
+    setUIState((prev) => ({ ...prev, filterRole: role }));
   };
 
   const setHighlight = (id: number | null) => {
-    setUIState(prev => ({ ...prev, highlightId: id }));
+    setUIState((prev) => ({ ...prev, highlightId: id }));
   };
 
   return (
     <div style={{ padding: 20 }}>
-
       <div style={{ marginBottom: 12 }}>
         <strong>Filter:</strong>{' '}
         <button onClick={() => setFilter(null)}>All</button>
@@ -68,12 +70,14 @@ export default function SSOTListGroupedState(props: Props) {
 
       <div style={{ marginBottom: 10 }}>
         <strong>Highlight:</strong>{' '}
-        <button onClick={() => setHighlight(3)}>Highlight Charlie (id=3)</button>{' '}
+        <button onClick={() => setHighlight(3)}>
+          Highlight Charlie (id=3)
+        </button>{' '}
         <button onClick={() => setHighlight(null)}>Clear Highlight</button>
       </div>
 
       <ul>
-        {filteredItems.map(item => (
+        {filteredItems.map((item) => (
           <li
             key={item.id}
             onClick={() => toggleSelect(item.id)}
@@ -85,8 +89,8 @@ export default function SSOTListGroupedState(props: Props) {
               backgroundColor: uiState.selectedIds.includes(item.id)
                 ? '#bbdefb'
                 : uiState.highlightId === item.id
-                ? '#fff59d'
-                : '#fff',
+                  ? '#fff59d'
+                  : '#fff',
             }}
           >
             {item.name} - {item.role}
@@ -97,15 +101,16 @@ export default function SSOTListGroupedState(props: Props) {
       <div style={{ marginTop: 20 }}>
         <p>
           🧠 <strong>Selected Items:</strong>{' '}
-          {selectedItems.length ? selectedItems.map(i => i.name).join(', ') : 'None'}
+          {selectedItems.length
+            ? selectedItems.map((i) => i.name).join(', ')
+            : 'None'}
         </p>
         <p>
-          🌟 <strong>Highlight Item:</strong>{' '}
-          {highlightItem?.name ?? 'None'}
+          🌟 <strong>Highlight Item:</strong> {highlightItem?.name ?? 'None'}
         </p>
         <p>
           🔎 <strong>Filtered Items:</strong>{' '}
-          {filteredItems.map(i => i.name).join(', ') || 'Empty'}
+          {filteredItems.map((i) => i.name).join(', ') || 'Empty'}
         </p>
       </div>
     </div>
