@@ -1,10 +1,18 @@
 import { GridLogicOperator } from '@mui/x-data-grid';
 
-export const ROWS = [
-  { id: 1, name: 'Alice', age: 25 },
-  { id: 2, name: 'Bob', age: 30 },
-  { id: 3, name: 'Charlie', age: 28 },
-  { id: 4, name: 'Diana', age: 22 },
+export interface Item  {
+  id: number;
+  name: string;
+  role: string;
+};
+
+
+export const DATA: Item[] = [
+  { id: 1, name: 'Alice', role: 'Dev' },
+  { id: 2, name: 'Bob', role: 'Design' },
+  { id: 3, name: 'Charlie', role: 'Dev' },
+  { id: 4, name: 'Diana', role: 'QA' },
+  { id: 5, name: 'Eve', role: 'Manager' },
 ];
 
 export const ROW_SELECTION_MODEL = {
@@ -25,3 +33,9 @@ export const COLUMNS = [
   { field: 'name', headerName: 'Name', width: 130 },
   { field: 'age', headerName: 'Age', width: 100 },
 ];
+
+export const INITIAL_UI_STATE: UIState = {
+  selectedIds: [],
+  highlightId: null,
+  filterRole: null,
+};
